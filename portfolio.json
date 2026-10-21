@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "lumen-foundry-ryan-vo",
+  "owner": "A220man",
+  "email": "ryandtvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: lumen-foundry-ryan-vo",
+  "workflows": [
+    "Register and configure LLMs with metadata, versioning, and default inference parameters",
+    "Run streaming inference via Server-Sent Events with configurable sampling parameters",
+    "Monitor real-time performance metrics including latency, throughput, and token counts"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
