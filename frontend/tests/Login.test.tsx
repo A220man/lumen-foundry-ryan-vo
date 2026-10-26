@@ -39,7 +39,7 @@ describe('Login', () => {
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(screen.getByLabelText('Password')).toBeInTheDocument();
     expect(screen.getByText('Sign In')).toBeInTheDocument();
-    expect(screen.getByText('Continue as Demo User')).toBeInTheDocument();
+    expect(screen.getByText(/Continue as Demo User/)).toBeInTheDocument();
   });
 
   it('shows error on failed login', async () => {

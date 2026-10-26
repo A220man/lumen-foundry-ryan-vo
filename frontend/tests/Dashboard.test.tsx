@@ -14,7 +14,6 @@ const mockApiClient = apiClient as any;
 describe('Dashboard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
   });
 
   it('renders loading state initially', () => {

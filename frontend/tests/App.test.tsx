@@ -38,10 +38,14 @@ describe('App', () => {
   });
 
   it('shows dashboard when authenticated', async () => {
+    // Mock localStorage to return a valid token for checkAuth
+    const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwibmFtZSI6IlRlc3QiLCJleHAiOjk5OTk5OTk5OTksInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJ2aWV3ZXIiXX19.fake-signature';
+    localStorage.setItem('access_token', mockToken);
+    
     mockUseAuthStore.mockReturnValue({
       isAuthenticated: true,
       user: { id: '1', email: 'test@test.com', name: 'Test', roles: ['viewer'] },
-      accessToken: 'token',
+      accessToken: mockToken,
       login: vi.fn(),
       logout: vi.fn(),
       checkAuth: vi.fn().mockResolvedValue(undefined),
