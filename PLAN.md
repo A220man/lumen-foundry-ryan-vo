@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-skeleton
+auth
 
 ## Roadmap
 
@@ -26,13 +26,18 @@ Tests: `backend/tests/test_health.py`, `backend/tests/test_models.py`, `backend/
 
 ### auth — OIDC Keycloak authentication with demo mode
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Keycloak realm import works
 - Login/logout flow functional
 - Demo mode binds localhost only
 - Auth middleware protects API endpoints
+- Role-based API protection for models/inference endpoints
+
+Implementation: `backend/app/core/auth.py`, `backend/app/main.py`, `backend/app/api/models.py`, `backend/app/api/inference.py`
+
+Tests: `backend/tests/test_auth.py`
 
 ### inference — LLM inference engine with model management
 

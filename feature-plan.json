@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "skeleton",
+  "current_feature": "auth",
   "features": [
     {
       "id": "skeleton",
@@ -58,15 +58,23 @@
     {
       "id": "auth",
       "title": "OIDC Keycloak authentication with demo mode",
-      "status": "planned",
+      "status": "in_progress",
       "acceptance": [
         "Keycloak realm import works",
         "Login/logout flow functional",
         "Demo mode binds localhost only",
-        "Auth middleware protects API endpoints"
+        "Auth middleware protects API endpoints",
+        "Role-based API protection for models/inference endpoints"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/core/auth.py",
+        "backend/app/main.py",
+        "backend/app/api/models.py",
+        "backend/app/api/inference.py"
+      ],
+      "tests": [
+        "backend/tests/test_auth.py"
+      ]
     },
     {
       "id": "inference",

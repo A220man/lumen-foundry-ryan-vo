@@ -7,8 +7,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.core.database import get_db
+from app.core.auth import require_operator, require_viewer
+ from app.core.database import get_db
 from app.models.model import Model as ModelDB
 
 
@@ -76,6 +76,7 @@ async def list_models(
     page_size: int = 20,
     active_only: bool = True,
     db: AsyncSession = Depends(get_db),
+    _user=Depends(require_viewer),
 ) -> ModelListResponse:
     """List registered models with pagination."""
     query = select(ModelDB)
@@ -112,6 +113,7 @@ async def list_models(
 async def create_model(
     model_data: ModelCreate,
     db: AsyncSession = Depends(get_db),
+    _user=Depends(require_operator),
 ) -> ModelResponse:
     """Create a new model entry."""
     model = ModelDB(
@@ -142,6 +144,7 @@ async def create_model(
 async def get_model(
     model_id: int,
     db: AsyncSession = Depends(get_db),
+    _user=Depends(require_viewer),
 ) -> ModelResponse:
     """Get a model by ID."""
     model = await db.get(ModelDB, model_id)
@@ -160,6 +163,7 @@ async def update_model(
     model_id: int,
     model_data: ModelUpdate,
     db: AsyncSession = Depends(get_db),
+    _user=Depends(require_operator),
 ) -> ModelResponse:
     """Update a model entry."""
     model = await db.get(ModelDB, model_id)
@@ -189,6 +193,7 @@ async def update_model(
 async def delete_model(
     model_id: int,
     db: AsyncSession = Depends(get_db),
+    _user=Depends(require_operator),
 ) -> None:
     """Delete a model entry."""
     model = await db.get(ModelDB, model_id)
