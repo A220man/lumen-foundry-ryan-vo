@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import health, models, inference
 from app.core.config import settings
 from app.core.database import init_db
+from app.core.auth import add_auth_middleware
 
 
 @asynccontextmanager
@@ -37,6 +38,17 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # Add authentication middleware (skip in demo mode for health endpoints)
+    if not (settings.DEMO_MODE and not settings.is_production):
+        add_auth_middleware(app, excluded_paths=[
+            "/docs",
+            "/redoc",
+            "/openapi.json",
+            "/api/v1/health",
+            "/api/v1/health/ready",
+            "/api/v1/health/live",
+        ])
 
     app.include_router(health.router, prefix="/api/v1", tags=["health"])
     app.include_router(models.router, prefix="/api/v1", tags=["models"])

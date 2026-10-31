@@ -13,9 +13,10 @@ from sse_starlette import EventSourceResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.database import get_db
-from app.models.model import Model as ModelDB
-from app.core.config import settings
+from app.core.auth import require_operator, require_viewer
+ from app.core.database import get_db
+ from app.models.model import Model as ModelDB
+ from app.core.config import settings
 
 
 router = APIRouter(prefix="/inference", tags=["inference"])
@@ -140,6 +141,7 @@ async def run_inference(
     request: InferenceRequest,
     db: AsyncSession = Depends(get_db),
     http_request: Request = None,
+    _user=Depends(require_viewer),
 ) -> InferenceResponse | EventSourceResponse:
     """Run inference on a registered model."""
     model = await get_model_or_404(request.model_id, db)
@@ -249,6 +251,7 @@ async def stream_inference(
 async def get_model_metrics(
     model_id: int,
     db: AsyncSession = Depends(get_db),
+    _user=Depends(require_viewer),
 ) -> ModelMetrics:
     """Get model performance metrics."""
     model = await get_model_or_404(model_id, db)
@@ -269,7 +272,7 @@ async def get_model_metrics(
     description="Get global inference engine statistics",
     response_model=dict,
 )
-async def get_inference_stats() -> dict:
+async def get_inference_stats(_user=Depends(require_viewer)) -> dict:
     """Get global inference statistics."""
     return {
         "total_requests": mock_engine.request_count,
