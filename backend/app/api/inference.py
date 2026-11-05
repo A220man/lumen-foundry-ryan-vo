@@ -14,9 +14,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.auth import require_operator, require_viewer
- from app.core.database import get_db
- from app.models.model import Model as ModelDB
- from app.core.config import settings
+from app.core.database import get_db
+from app.models.model import Model as ModelDB
+from app.core.config import settings
 
 
 router = APIRouter(prefix="/inference", tags=["inference"])

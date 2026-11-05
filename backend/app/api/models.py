@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.auth import require_operator, require_viewer
- from app.core.database import get_db
+from app.core.database import get_db
 from app.models.model import Model as ModelDB
 
 
