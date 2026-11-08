@@ -205,3 +205,136 @@ async def test_expired_token_rejected():
     except HTTPException as e:
         assert e.status_code == 401
         assert "expired" in e.detail.lower()
+@pytest.mark.asyncio
+async def test_role_based_models_access():
+    """Test role-based access control on models endpoints."""
+    from app.main import create_app
+    from httpx import AsyncClient, ASGITransport
+    # create_demo_token is defined in this module
+    
+    app = create_app()
+    
+    # Viewer token - can read but not write
+    viewer_token = create_demo_token(roles=["viewer"])
+    viewer_headers = {"Authorization": f"Bearer {viewer_token}"}
+    
+    # Operator token - can read and write
+    operator_token = create_demo_token(roles=["operator"])
+    operator_headers = {"Authorization": f"Bearer {operator_token}"}
+    
+    # Admin token - can do everything
+    admin_token = create_demo_token(roles=["admin"])
+    admin_headers = {"Authorization": f"Bearer {admin_token}"}
+    
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        # Test GET /models - viewer should succeed
+        resp = await ac.get("/api/v1/models", headers=viewer_headers)
+        assert resp.status_code == 200
+        
+        # Test POST /models - viewer should fail (403)
+        resp = await ac.post("/api/v1/models", headers=viewer_headers, json={
+            "name": "Test Model",
+            "model_id": "test-model",
+            "description": "Test",
+        })
+        assert resp.status_code == 403
+        
+        # Test POST /models - operator should succeed
+        resp = await ac.post("/api/v1/models", headers=operator_headers, json={
+            "name": "Test Model",
+            "model_id": "test-model-operator",
+            "description": "Test",
+        })
+        assert resp.status_code == 201
+        model_id = resp.json()["id"]
+        
+        # Test PATCH /models - viewer should fail (403)
+        resp = await ac.patch(f"/api/v1/models/{model_id}", headers=viewer_headers, json={
+            "description": "Updated"
+        })
+        assert resp.status_code == 403
+        
+        # Test PATCH /models - operator should succeed
+        resp = await ac.patch(f"/api/v1/models/{model_id}", headers=operator_headers, json={
+            "description": "Updated by operator"
+        })
+        assert resp.status_code == 200
+        
+        # Test DELETE /models - viewer should fail (403)
+        resp = await ac.delete(f"/api/v1/models/{model_id}", headers=viewer_headers)
+        assert resp.status_code == 403
+        
+        # Test DELETE /models - operator should succeed
+        resp = await ac.delete(f"/api/v1/models/{model_id}", headers=operator_headers)
+        assert resp.status_code == 204
+        
+        # Test admin can also do everything
+        resp = await ac.post("/api/v1/models", headers=admin_headers, json={
+            "name": "Admin Model",
+            "model_id": "admin-model",
+            "description": "Test",
+        })
+        assert resp.status_code == 201
+
+
+@pytest.mark.asyncio
+async def test_role_based_inference_access():
+    """Test role-based access control on inference endpoints."""
+    from app.main import create_app
+    from httpx import AsyncClient, ASGITransport
+    # create_demo_token is defined in this module
+    from app.models.model import Model as ModelDB
+    from app.core.database import get_session
+    
+    app = create_app()
+    
+    viewer_token = create_demo_token(roles=["viewer"])
+    viewer_headers = {"Authorization": f"Bearer {viewer_token}"}
+    
+    operator_token = create_demo_token(roles=["operator"])
+    operator_headers = {"Authorization": f"Bearer {operator_token}"}
+    
+    admin_token = create_demo_token(roles=["admin"])
+    admin_headers = {"Authorization": f"Bearer {admin_token}"}
+    
+    # Create a model first
+    async with get_session() as session:
+        model = ModelDB(
+            name="Test Model",
+            model_id="test-model-inference",
+            description="Test model for inference",
+            is_active=True,
+        )
+        session.add(model)
+        await session.flush()
+        await session.refresh(model)
+        model_id = model.id
+    
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        # Test POST /inference - viewer should succeed (inference requires viewer)
+        resp = await ac.post("/api/v1/inference", headers=viewer_headers, json={
+            "model_id": model_id,
+            "prompt": "Test prompt",
+        })
+        assert resp.status_code == 200
+        
+        # Test GET /inference/metrics - viewer should succeed
+        resp = await ac.get(f"/api/v1/inference/models/{model_id}/metrics", headers=viewer_headers)
+        assert resp.status_code == 200
+        
+        # Test GET /inference/stats - viewer should succeed
+        resp = await ac.get("/api/v1/inference/stats", headers=viewer_headers)
+        assert resp.status_code == 200
+        
+        # Operator and admin should also work
+        resp = await ac.post("/api/v1/inference", headers=operator_headers, json={
+            "model_id": model_id,
+            "prompt": "Test prompt",
+        })
+        assert resp.status_code == 200
+        
+        resp = await ac.post("/api/v1/inference", headers=admin_headers, json={
+            "model_id": model_id,
+            "prompt": "Test prompt",
+        })
+        assert resp.status_code == 200
