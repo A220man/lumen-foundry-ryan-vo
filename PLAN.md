@@ -26,7 +26,7 @@ Tests: `backend/tests/test_health.py`, `backend/tests/test_models.py`, `backend/
 
 ### auth — OIDC Keycloak authentication with demo mode
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - Keycloak realm import works
@@ -35,9 +35,9 @@ Acceptance:
 - Auth middleware protects API endpoints
 - Role-based API protection for models/inference endpoints
 
-Implementation: `backend/app/core/auth.py`, `backend/app/main.py`, `backend/app/api/models.py`, `backend/app/api/inference.py`
+Implementation: `backend/app/core/auth.py`, `backend/app/main.py`, `backend/app/api/models.py`, `backend/app/api/inference.py`, `frontend/src/stores/authStore.ts`, `frontend/src/components/Login.tsx`, `frontend/src/components/Layout.tsx`, `frontend/src/App.tsx`
 
-Tests: `backend/tests/test_auth.py`
+Tests: `backend/tests/test_auth.py`, `frontend/tests/Login.test.tsx`, `frontend/tests/Layout.test.tsx`
 
 ### inference — LLM inference engine with model management
 
