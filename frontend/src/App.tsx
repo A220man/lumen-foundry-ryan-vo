@@ -13,8 +13,15 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    checkAuth();
-    setChecked(true);
+    let mounted = true;
+    async function initializeAuth() {
+      await checkAuth();
+      if (mounted) {
+        setChecked(true);
+      }
+    }
+    initializeAuth();
+    return () => { mounted = false; };
   }, [checkAuth]);
 
   if (!checked) {

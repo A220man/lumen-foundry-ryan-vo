@@ -58,7 +58,7 @@
     {
       "id": "auth",
       "title": "OIDC Keycloak authentication with demo mode",
-      "status": "in_progress",
+      "status": "done",
       "acceptance": [
         "Keycloak realm import works",
         "Login/logout flow functional",
@@ -70,10 +70,16 @@
         "backend/app/core/auth.py",
         "backend/app/main.py",
         "backend/app/api/models.py",
-        "backend/app/api/inference.py"
+        "backend/app/api/inference.py",
+        "frontend/src/stores/authStore.ts",
+        "frontend/src/components/Login.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/App.tsx"
       ],
       "tests": [
-        "backend/tests/test_auth.py"
+        "backend/tests/test_auth.py",
+        "frontend/tests/Login.test.tsx",
+        "frontend/tests/Layout.test.tsx"
       ]
     },
     {

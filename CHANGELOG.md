@@ -1,8 +1,27 @@
 # Changelog
 
-## 1.4.0 — work-in-progress checkpoint
+## 1.5.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.4.0 — 2026-11-11
+
+### Added
+- OIDC Keycloak authentication with demo mode (complete)
+- JWT token validation and role-based access control
+- Auth middleware protecting API endpoints
+- Role-based protection for models and inference endpoints (admin/operator/viewer)
+- Frontend auth store with persisted login state
+- Login component with demo mode and Keycloak login
+- Layout component with user info and logout
+- PrivateRoute component with proper async auth initialization
+
+### Fixed
+- PrivateRoute race condition: await checkAuth() before marking auth as checked
+
+### Tests
+- Backend: 9 auth tests pass (token validation, role dependencies, expired tokens, RBAC)
+- Frontend: Login and Layout component tests pass
 
 ## 1.3.0 — work-in-progress checkpoint
 
