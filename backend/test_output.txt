@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.7.0 -- /var/lib/alan-portfolio/workspaces/ryan/lumen-foundry-ryan-vo/backend/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /var/lib/alan-portfolio/workspaces/ryan/lumen-foundry-ryan-vo
+configfile: pyproject.toml
+plugins: httpx-0.28.0, cov-5.0.0, asyncio-0.23.8, anyio-4.16.0
+asyncio: mode=Mode.AUTO
+collecting ... collected 28 items
+
+tests/test_auth.py::test_health_endpoint_no_auth PASSED                  [  3%]
+tests/test_auth.py::test_models_endpoint_requires_auth PASSED            [  7%]
+tests/test_auth.py::test_inference_endpoint_requires_auth PASSED         [ 10%]
+tests/test_auth.py::test_demo_token_validation PASSED                    [ 14%]
+tests/test_auth.py::test_get_current_user_dependency PASSED              [ 17%]
+tests/test_auth.py::test_require_role_dependencies PASSED                [ 21%]
+tests/test_auth.py::test_expired_token_rejected PASSED                   [ 25%]
+tests/test_auth.py::test_role_based_models_access PASSED                 [ 28%]
+tests/test_auth.py::test_role_based_inference_access PASSED              [ 32%]
+tests/test_health.py::test_health_check PASSED                           [ 35%]
+tests/test_health.py::test_readiness_check PASSED                        [ 39%]
+tests/test_health.py::test_liveness_check PASSED                         [ 42%]
+tests/test_inference.py::test_inference_non_streaming PASSED             [ 46%]
+tests/test_inference.py::test_inference_streaming_endpoint PASSED        [ 50%]
+tests/test_inference.py::test_inference_model_not_found PASSED           [ 53%]
+tests/test_inference.py::test_inference_inactive_model PASSED            [ 57%]
+tests/test_inference.py::test_inference_validation PASSED                [ 60%]
+tests/test_inference.py::test_model_metrics PASSED                       [ 64%]
+tests/test_inference.py::test_global_stats PASSED                        [ 67%]
+tests/test_models.py::test_list_models_empty PASSED                      [ 71%]
+tests/test_models.py::test_create_model PASSED                           [ 75%]
+tests/test_models.py::test_create_model_duplicate_model_id PASSED        [ 78%]
+tests/test_models.py::test_get_model PASSED                              [ 82%]
+tests/test_models.py::test_get_model_not_found PASSED                    [ 85%]
+tests/test_models.py::test_update_model PASSED                           [ 89%]
+tests/test_models.py::test_delete_model PASSED                           [ 92%]
+tests/test_models.py::test_list_models_pagination PASSED                 [ 96%]
+tests/test_models.py::test_list_models_active_only PASSED                [100%]
+
+============================== 28 passed in 1.68s ==============================
