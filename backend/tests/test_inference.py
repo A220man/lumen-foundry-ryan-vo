@@ -4,6 +4,7 @@ from __future__ import annotations
 import pytest
 from httpx import AsyncClient
 from app.models.model import Model as ModelDB
+from app.api.inference import get_simulated_gpu_metrics
 
 
 @pytest.fixture

@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import json
 import time
+import random
 from typing import AsyncGenerator, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -118,6 +119,11 @@ class MockInferenceEngine:
         return mock_response
 
 
+def get_simulated_gpu_metrics() -> tuple[Optional[float], Optional[float]]:
+    """Return simulated GPU memory and utilization if monitoring is enabled."""
+    if settings.ENABLE_GPU_MONITORING:
+        return random.uniform(2048, 8192), random.uniform(10, 90)
+    return None, None
 mock_engine = MockInferenceEngine()
 
 
