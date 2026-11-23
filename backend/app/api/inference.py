@@ -5,6 +5,7 @@ import asyncio
 import json
 import time
 import random
+random.seed(42)
 from typing import AsyncGenerator, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
