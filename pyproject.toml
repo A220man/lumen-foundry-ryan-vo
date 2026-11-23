@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lumen-foundry"
-version = "1.6.0"
+version = "1.7.0"
 description = "High-throughput and memory-efficient inference and serving engine for LLMs"
 readme = "README.md"
 license = {text = "MIT"}
